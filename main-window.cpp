@@ -8,9 +8,9 @@ MainWindow::MainWindow(QWidget *parent) :
   databaseManager()
 {
   ui->setupUi(this);
-  databaseManager.createDatabase();
-  //databaseManager.download(QDate(2014,01,01), QDate(2014,01,01));
-  databaseManager.add(QDate(2014,01,01), QDate(2014,01,01));
+  //databaseManager.createDatabase();
+  //databaseManager.downloadAndAdd(QDate(2014,01,01), QDate(2014,01,5));
+  //databaseManager.add(QDate(2014,01,01), QDate(2014,01,01));
 }
 
 MainWindow::~MainWindow()
