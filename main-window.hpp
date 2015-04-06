@@ -1,7 +1,7 @@
-#ifndef MAINWINDOW_HPP
-#define MAINWINDOW_HPP
+#pragma once
 
 #include <QMainWindow>
+#include "database-manager.hpp"
 
 namespace Ui {
   class MainWindow;
@@ -10,13 +10,10 @@ namespace Ui {
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
   public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
   private:
     Ui::MainWindow *ui;
+    DatabaseManager databaseManager;
 };
-
-#endif // MAINWINDOW_HPP
