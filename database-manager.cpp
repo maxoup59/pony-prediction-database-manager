@@ -113,10 +113,10 @@ void DatabaseManager::add(const QDate & date, const bool & doDrop)
     QSqlQuery query;
     QString statement = "";
     QStringList columns;
-    QFile file(dir + "/columns");
+    QFile file(dir + "/columns.txt");
     if(!file.open(QIODevice::ReadOnly)) {
       ok = false;
-      error = dir + "/columns " + file.errorString();
+      error = dir + "/columns.txt " + file.errorString();
     }
     if(ok)
     {
