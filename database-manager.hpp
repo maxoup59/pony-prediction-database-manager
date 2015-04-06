@@ -6,6 +6,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QObject>
+#include <QString>
 
 class DatabaseManager : public QObject
 {
@@ -25,6 +26,7 @@ class DatabaseManager : public QObject
     void downloadFinished();
     void downloadReadyRead();
   private:
+    static const QString DIR;
     QString databaseName;
     QNetworkAccessManager manager;
     QNetworkReply * currentDownload;

@@ -3,6 +3,9 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <QSqlError>
+#include <QStringList>
+
+const QString DatabaseManager::DIR = "C:/Users/Loic/coding/pony-prediction-data";
 
 DatabaseManager::DatabaseManager() :
   QObject(),
@@ -21,7 +24,7 @@ DatabaseManager::~DatabaseManager()
 
 void DatabaseManager::createDatabase()
 {
-  // Create database
+  // Init
   bool ok = true;
   QString error = "";
   QSqlDatabase database = QSqlDatabase::addDatabase("QMYSQL");
@@ -29,28 +32,28 @@ void DatabaseManager::createDatabase()
   database.setHostName("localhost");
   database.setUserName("root");
   database.setPassword("");
+  // Connect to database
   if(ok && !database.open())
   {
     ok = false;
     error = "Couldn't connect to database";
   }
+  // Create database
   if(ok)
   {
-    query.prepare("CREATE DATABASE IF NOT EXISTS " + databaseName);
+    query.prepare("CREATE DATABASE " + databaseName);
   }
   if(ok && !query.exec())
   {
     ok = false;
-    error = "Couldn't create database: " + databaseName;
+    error = "Couldn't create database: " + databaseName
+        + database.lastError().text() + query.lastError().text();
   }
-  /*if(ok)
-  {
-    database.setDatabaseName(databaseName);
-  }*/
   if(!ok)
   {
     qDebug() << error;
   }
+  database.close();
 }
 
 void DatabaseManager::add(const QDate & date)
@@ -60,7 +63,7 @@ void DatabaseManager::add(const QDate & date)
   QString error = "";
   QSqlDatabase database = QSqlDatabase::addDatabase("QMYSQL");
   QSqlQuery query;
-  QString statement;
+  QString statement = "";
   QString tableName = "day" + date.toString("yyyyMMdd");
   database.setHostName("localhost");
   database.setUserName("root");
@@ -72,16 +75,40 @@ void DatabaseManager::add(const QDate & date)
     ok = false;
     error = "Couldn't connect to database" + database.lastError().text();
   }
+  // Loads columns
+  QStringList columns;
+  QFile file(DIR + "/columns.txt");
+  if(!file.open(QIODevice::ReadOnly)) {
+    qDebug() << file.errorString();
+  }
+  QTextStream in(&file);
+  while(!in.atEnd()) {
+    QString line = in.readLine();
+    columns.append(line);
+  }
+  file.close();
+  //qDebug() << columns;
   // Create table
   if(ok)
   {
-    statement = " CREATE TABLE ";
-    statement += tableName + " ("
-                             "date text"
-                             ");";
+    statement = " DROP TABLE IF EXISTS " + tableName + " ; ";
+    query.prepare(statement);
+  }
+  if(ok && !query.exec())
+  {
+    ok = false;
+    error = "Couldn't drop table: " + tableName + database.lastError().text() + query.lastError().text();
   }
   if(ok)
   {
+    statement = " CREATE TABLE ";
+    statement += tableName + " ( ";
+    for(int i = 0 ; i < columns.size() - 1 ; i++)
+    {
+      statement += " " + columns[i] + " text, ";
+    }
+    statement += " " + columns[columns.size() - 1] + " text );";
+    //qDebug() << statement;
     query.prepare(statement);
   }
   if(ok && !query.exec())
@@ -96,6 +123,7 @@ void DatabaseManager::add(const QDate & date)
   {
     qDebug() << error ;
   }
+  database.close();
 }
 
 void DatabaseManager::add(const QDate & dateFirst, const QDate & dateLast)
@@ -109,8 +137,7 @@ void DatabaseManager::download(const QDate & date)
   QString url =
       "http://www.aspiturf.com/PTcoursejourdetinsertdatecsv.php?datejour="
       + date.toString("yyyy-MM-dd");
-  QString dir = "C:/Users/Loic/coding/pony-prediction-data";
-  QString filename = dir + "/day" + date.toString("yyyyMMdd") + ".csv";
+  QString filename = DIR + "/day" + date.toString("yyyyMMdd") + ".csv";
   output.setFileName(filename);
   if (!output.open(QIODevice::WriteOnly))
   {

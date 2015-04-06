@@ -20,3 +20,5 @@ HEADERS  += main-window.hpp \
     database-manager.hpp
 
 FORMS    += main-window.ui
+
+DISTFILES +=
