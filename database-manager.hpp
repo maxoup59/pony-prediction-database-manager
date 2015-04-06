@@ -7,37 +7,35 @@
 #include <QNetworkReply>
 #include <QObject>
 #include <QString>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QDebug>
+#include <QSqlError>
+#include <QStringList>
+#include <QMutex>
+#include <QThread>
 
 class DatabaseManager : public QObject
 {
     Q_OBJECT
   public:
-    DatabaseManager();
+    DatabaseManager(const QString & databaseName);
     ~DatabaseManager();
-    void createDatabase();
-    void add(const QDate & date);
-    void add(const QDate & dateFirst, const QDate & dateLast);
-    void addNext();
-    void download(const QDate & date);
-    void download(const QDate & dateFirst, const QDate & dateLast);
-    void downloadNext();
-    void downloadAndAdd(const QDate & date);
-    void downloadAndAdd(const QDate & dateFirst, const QDate & dateLast);
-    void downloadAndAdd();
-  private slots:
-    //void startNextDownload();
-    //void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void downloadFinished();
-    void downloadReadyRead();
+    bool connect();
+    bool createDatabase();
+    void add(const QDate & date, const bool & doDrop = false);
+    void add(const QDate & dateFirst, const QDate & dateLast,
+             const bool & doDrop = false);
+    void download(const QDate & date, const bool & doErase = false);
+    void download(const QDate & dateFirst, const QDate & dateLast,
+                  const bool & doErase = false);
+    void downloadAndAdd(const QDate & date, const bool & doErase = false);
+    void downloadAndAdd(const QDate & dateFirst, const QDate & dateLast,
+                        const bool & doErase = false);
   private:
-    static const QString DIR;
-    static const QString DATABASE_NAME;
     static const int COLUMNS_COUNT;
+    QSqlDatabase database;
     QString databaseName;
-    QNetworkAccessManager manager;
-    QNetworkReply * currentDownload;
-    QFile output;
-    QDate dateFirst;
-    QDate dateLast;
-    QDate currentDate;
+    QString dir;
+    bool connected;
 };

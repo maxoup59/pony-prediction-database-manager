@@ -21,4 +21,5 @@ HEADERS  += main-window.hpp \
 
 FORMS    += main-window.ui
 
-DISTFILES +=
+DISTFILES += \
+    columns.txt
