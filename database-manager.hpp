@@ -36,6 +36,7 @@ class DatabaseManager : public QObject
     static const int COLUMNS_COUNT;
     QSqlDatabase database;
     QString databaseName;
-    QString dir;
+    QString rawDataDir;
+    QString columnsDir;
     bool connected;
 };

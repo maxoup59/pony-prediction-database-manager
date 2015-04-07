@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if(databaseManager.createDatabase())
       databaseManager.connect();
   }
-  databaseManager.downloadAndAdd(QDate(2014,01,01), QDate(2014,01,2), true);
+  databaseManager.add(QDate(2013,01,01), QDate(2013,01,31), true);
 }
 
 MainWindow::~MainWindow()

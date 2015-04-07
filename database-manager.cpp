@@ -7,7 +7,8 @@ DatabaseManager::DatabaseManager(const QString & databaseName) :
   QObject(),
   databaseName(databaseName),
   database(),
-  dir("C:/Users/Loic/coding/pony-prediction-data"),
+  rawDataDir("C:/Users/Loic/pony-prediction/raw-data"),
+  columnsDir("C:/Users/Loic/pony-prediction"),
   connected(false)
 {
 }
@@ -85,7 +86,7 @@ void DatabaseManager::add(const QDate & date, const bool & doDrop)
 {
   qDebug() << "Adding " + date.toString("yyyy-MM-dd") + " to database";
   QString tableName = "day" + date.toString("yyyyMMdd");
-  QString filePath = dir + "/" + tableName + ".csv";
+  QString filePath = rawDataDir + "/" + tableName + ".csv";
   bool ok = true;
   QString error = "";
   //
@@ -113,10 +114,10 @@ void DatabaseManager::add(const QDate & date, const bool & doDrop)
     QSqlQuery query;
     QString statement = "";
     QStringList columns;
-    QFile file(dir + "/columns.txt");
+    QFile file(columnsDir + "/columns.txt");
     if(!file.open(QIODevice::ReadOnly)) {
       ok = false;
-      error = dir + "/columns.txt " + file.errorString();
+      error = columnsDir + "/columns.txt " + file.errorString();
     }
     if(ok)
     {
@@ -145,7 +146,8 @@ void DatabaseManager::add(const QDate & date, const bool & doDrop)
     QString statement = "";
     QFile file(filePath);
     if(!file.open(QIODevice::ReadOnly)) {
-      qDebug() << file.errorString();
+      ok = false;
+      error = filePath +" "+ file.errorString();
     }
     QTextStream in(&file);
     in.setCodec("UTF-8");
@@ -162,23 +164,20 @@ void DatabaseManager::add(const QDate & date, const bool & doDrop)
         for(int i = 0 ; i < values.size() - 1 ; i++)
         {
           statement += " '" + values[i] + "' , ";
-          //statement += "'bob', ";
         }
         statement += " '" + values[values.size()-1] + "' );";
-        //statement += " 'bob'); ";
         query.prepare(statement);
         if(!query.exec())
         {
-          qDebug() << "Couldn't insert into " + tableName
-                      + database.lastError().text() + query.lastError().text();
-          qDebug() << statement;
+          qDebug() << "ERROR: Couldn't insert into " + tableName
+              + database.lastError().text() + query.lastError().text();
         }
       }
       else
       {
-        qDebug() << "Not the right count of value: "
-                    + QString::number(values.size())
-                    + " instead of " + QString::number(COLUMNS_COUNT);
+        qDebug() <<  "ERROR: Not the right count of value: "
+            + QString::number(values.size())
+            + " instead of " + QString::number(COLUMNS_COUNT);
       }
     }
     file.close();
@@ -206,7 +205,7 @@ void DatabaseManager::download(const QDate & date, const bool & doErase)
   QString url =
       "http://www.aspiturf.com/PTcoursejourdetinsertdatecsv.php?datejour="
       + date.toString("yyyy-MM-dd");
-  QString filename = dir + "/day" + date.toString("yyyyMMdd") + ".csv";
+  QString filename = rawDataDir + "/day" + date.toString("yyyyMMdd") + ".csv";
   if(ok && !doErase && QFile::exists(filename))
   {
     ok = false;
