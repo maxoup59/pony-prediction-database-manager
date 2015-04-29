@@ -46,7 +46,7 @@ QString Util::getLineFromConf(const QString & id)
   QFile file("./conf.xml");
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
-    qDebug() << "error eiurgyeirug";
+    qDebug() << "Can not find the conf file";
     return QString();
   }
   QXmlStreamReader xml(&file);
