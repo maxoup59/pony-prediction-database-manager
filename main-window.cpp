@@ -6,7 +6,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    databaseManager("ponyprediction")
+    databaseManager(Util::getLineFromConf("databaseName"))
 {
     ui->setupUi(this);
     if(!databaseManager.connect())
