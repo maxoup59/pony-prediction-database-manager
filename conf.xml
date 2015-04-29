@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conf>
+  <username>username</username>
+  <password>password</password>
+  <pathToSaves>pathToSaves</pathToSaves>
+  <pathToRawData>pathToRawData</pathToRawData>
+  <pathToColumn>pathToColumn</pathToColumn>
+  <mutationFrequency>0.3</mutationFrequency>
+  <mutationIntensity>0.3</mutationIntensity>
+  <brainCount>4</brainCount>
+  <layerCount>4</layerCount>
+</conf>

@@ -1,5 +1,6 @@
 #include "database-manager.hpp"
-#include <QEventLoop>;
+#include <QEventLoop>
+#include "util.hpp"
 
 const int DatabaseManager::COLUMNS_COUNT = 82;
 
@@ -7,8 +8,8 @@ DatabaseManager::DatabaseManager(const QString & databaseName) :
   QObject(),
   databaseName(databaseName),
   database(),
-  rawDataDir("C:/Users/Loic/pony-prediction/raw-data"),
-  columnsDir("C:/Users/Loic/pony-prediction"),
+  rawDataDir(Util::getLineFromConf("pathToRawData")),
+  columnsDir(Util::getLineFromConf("pathToColumn")),
   connected(false)
 {
 }
@@ -24,8 +25,8 @@ bool DatabaseManager::connect()
   QString error = "";
   database = QSqlDatabase::addDatabase("QMYSQL");
   database.setHostName("localhost");
-  database.setUserName("root");
-  database.setPassword("");
+  database.setUserName("ponyprediction");
+  database.setPassword("151pokemons");
   database.setDatabaseName(databaseName);
   if(ok && !database.open())
   {

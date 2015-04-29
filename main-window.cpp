@@ -5,7 +5,7 @@
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
-  databaseManager("pony_prediction")
+  databaseManager("ponyprediction")
 {
   ui->setupUi(this);
   if(!databaseManager.connect())
@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if(databaseManager.createDatabase())
       databaseManager.connect();
   }
-  databaseManager.add(QDate(2013,01,01), QDate(2013,01,31), true);
+  databaseManager.add(QDate(2014,01,01), QDate(2014,12,31), true);
 }
 
 MainWindow::~MainWindow()
