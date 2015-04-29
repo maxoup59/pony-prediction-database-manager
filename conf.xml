@@ -2,6 +2,7 @@
 <conf>
   <username>username</username>
   <password>password</password>
+  <databaseName>databaseName</databaseName>
   <pathToSaves>pathToSaves</pathToSaves>
   <pathToRawData>pathToRawData</pathToRawData>
   <pathToColumn>pathToColumn</pathToColumn>
@@ -9,4 +10,9 @@
   <mutationIntensity>0.3</mutationIntensity>
   <brainCount>4</brainCount>
   <layerCount>4</layerCount>
+  <startDate>startDate</startDate>
+  <endDate>endDate</endDate>
+  <doErase>true</doErase>
+  <download>true</download>
+  <add>true</add>
 </conf>

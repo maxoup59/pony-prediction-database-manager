@@ -25,8 +25,8 @@ bool DatabaseManager::connect()
   QString error = "";
   database = QSqlDatabase::addDatabase("QMYSQL");
   database.setHostName("localhost");
-  database.setUserName("ponyprediction");
-  database.setPassword("151pokemons");
+  database.setUserName(Util::getLineFromConf("username"));
+  database.setPassword(Util::getLineFromConf("password"));
   database.setDatabaseName(databaseName);
   if(ok && !database.open())
   {
@@ -53,8 +53,8 @@ bool DatabaseManager::createDatabase()
   QString error = "";
   database = QSqlDatabase::addDatabase("QMYSQL");
   database.setHostName("localhost");
-  database.setUserName("root");
-  database.setPassword("");
+  database.setUserName(Util::getLineFromConf("username"));
+  database.setPassword(Util::getLineFromConf("password"));
   QSqlQuery query;
   if(ok && !database.open())
   {

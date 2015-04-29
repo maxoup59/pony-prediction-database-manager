@@ -2,6 +2,7 @@
 
 #include <QMainWindow>
 #include "database-manager.hpp"
+#include "util.hpp"
 
 namespace Ui {
   class MainWindow;
